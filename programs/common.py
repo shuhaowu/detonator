@@ -11,6 +11,10 @@ def buckify(window, dt):
   window *= 3600
   return str(int(timestamp // window))
 
+def unbuckify(window, bucket):
+  bucket = int(bucket)
+  return datetime.fromtimestamp(bucket * window * 3600)
+
 def binned_crashes_key(type, hours):
   return "dt-{}-crashes-{}".format(type, hours)
 
@@ -58,5 +62,4 @@ class CrashCounts(object):
         t.append(time)
         crash_counts.append(int(count))
 
-    # First and last are skewed due to the way we collect the data.
-    return t[1:-1], crash_counts[1:-1]
+    return t, crash_counts

@@ -2,6 +2,7 @@ from __future__ import absolute_import, division
 
 from datetime import datetime, timedelta
 
+from math import sqrt
 from scipy import stats
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +16,7 @@ def acf(x, length=8):
   return a
 
 @register
-def acf_plot_raw(type, date, lag=8, window=24, days=20):
+def acf_plot_raw(type, date, lag=8, window=24, days=30):
   lag, window, days = int(lag), int(window), int(days)
   date = datetime.strptime(date, "%Y%m%d")
 
@@ -32,6 +33,12 @@ def acf_plot_raw(type, date, lag=8, window=24, days=20):
   plt.xlabel("Lag")
   plt.ylabel("ACF")
   plt.bar(t, a, width=0.04)
+
+  err = 2 / sqrt(days)
+  plt.plot([0, lag+1], [err, err], "r--")
+  plt.plot([0, lag+1], [-err, -err], "r--")
+  plt.plot([0, lag+1], [0, 0], "k-")
+
   plt.xlim(0, lag)
   plt.show()
 
